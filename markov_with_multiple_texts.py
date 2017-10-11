@@ -139,6 +139,21 @@ def validate_n_gram_amount(input_text):
             print "Please input a number less than %s" % (length)
 
 
+
+def write_tweet(random_text):
+    """takes <140 text and returns it plus twitter options"""
+    while True:
+        print random_text
+        choice = raw_input("Enter to tweet again [q to quit] > ")
+        choice = choice.lower()
+        print choice
+        if choice == 'q':
+            print 'Thank you for tweeting.'
+            break
+        else:
+            random_text = make_text(chains, n_gram_size)
+
+
 input_path = sys.argv[2:]
 open_and_read_file(input_path)
 
@@ -155,4 +170,4 @@ chains = make_chains(input_text, n_gram_size)
 random_text = make_text(chains, n_gram_size)
 
 
-print random_text
+write_tweet(random_text)
