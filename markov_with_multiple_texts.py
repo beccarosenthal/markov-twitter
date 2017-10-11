@@ -107,20 +107,35 @@ def make_text(chains, n_gram_size):
                     #ignore commas but break at all OTHER punc
                     if not words[i][-1] == ",":
                         break
-    #make line breaks at punctuation
+    # make line breaks at punctuation
     for i in range(len(words)):
         if words[i][-1] in string.punctuation and words[i][-1] != ',':
             words[i + 1: i + 1] = '\n'
 
     ####format for twitter#####
+
+    # for i in range(len(words)):
+    #     if words[i][0].isupper():
+    #         words[i - 1:i - 1] = "."
+
     full_string = " ".join(words)
 
-    twitter_length_string = full_string[:141]
+    twitter_length_string = full_string[:139]
     #find last punctuation before twitter limit; return pretty tweet
+
     for i in range(-1, -len(twitter_length_string), -1):
-        if twitter_length_string[i] in set(['.', '?', '!']):
+        if twitter_length_string[i] in set(['.', '?', '!', ',']):
+            if twitter_length_string[i] == ",":
+                twitter_length_string = twitter_length_string[:i] + "."
+                return twitter_length_string
+
             return twitter_length_string[:i + 1]
-    return twitter_length_string
+    #if there's no punc, truncate it to full word at end, add period
+    for i in range(-1, -len(twitter_length_string), -1):
+        if twitter_length_string[i] == " ":
+            twitter_length_string = twitter_length_string[:i] + "."
+            return twitter_length_string
+
 
 
 def validate_n_gram_amount(input_text):
