@@ -4,6 +4,8 @@ to draw from"""
 from random import choice
 import string
 import sys
+import twitter
+import os
 
 
 def open_and_read_file(input_path):
@@ -139,14 +141,21 @@ def validate_n_gram_amount(input_text):
             print "Please input a number less than %s" % (length)
 
 
-
-def write_tweet(random_text):
+def write_tweet_REPL(random_text):
     """takes <140 text and returns it plus twitter options"""
+
     while True:
-        print random_text
+        # This will print info about credentials to make sure
+        # they're correct
+        print api.VerifyCredentials()
+        #tweet the tweet
+        status = api.PostUpdate(random_text)
+        #print the tweeted tweet and verify successful posting
+        #if successful.
+        print status.text
+
         choice = raw_input("Enter to tweet again [q to quit] > ")
         choice = choice.lower()
-        print choice
         if choice == 'q':
             print 'Thank you for tweeting.'
             break
@@ -169,5 +178,10 @@ chains = make_chains(input_text, n_gram_size)
 # Produce random text
 random_text = make_text(chains, n_gram_size)
 
+api = twitter.Api(
+    consumer_key=os.environ['TWITTER_CONSUMER_KEY'],
+    consumer_secret=os.environ['TWITTER_CONSUMER_SECRET'],
+    access_token_key=os.environ['TWITTER_ACCESS_TOKEN_KEY'],
+    access_token_secret=os.environ['TWITTER_ACCESS_TOKEN_SECRET'])
 
-write_tweet(random_text)
+write_tweet_REPL(random_text)
